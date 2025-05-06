@@ -1,0 +1,48 @@
+clc;
+close all;
+clear all;
+a = checkerboard(15,5,5)>0.5;
+subplot(4,3,1);
+imshow(a); title('Input Image');
+
+b = edge(a,'sobel',0.1,'both');
+subplot(4,3,2);
+imshow(b);title('sobel H & V');
+
+b = edge(a,'sobel',0.1,'horizontal');
+subplot(4,3,3);
+imshow(b);title('sobel Horizontal');
+
+b = edge(a,'sobel',0.1,'vertical');
+subplot(4,3,4);
+imshow(b);title('sobel vertical');
+
+d = edge(a,'prewitt',0.1,'horizontal');
+subplot(4,3,5);
+imshow(d);title('prewitt horizontal');
+
+d = edge(a,'prewitt',0.1,'vertical');
+subplot(4,3,6);
+imshow(d);title('prewitt vertical');
+
+d = edge(a,'prewitt',0.1,'both');
+subplot(4,3,7);
+imshow(d);title('prewitt V & H');
+
+c = edge(a,'roberts','both');
+subplot(4,3,8);
+imshow(c);title('Roberts H & V');
+
+e = edge(a , 'log','both');
+subplot(4,3,9);
+imshow(e);title('Laplace Gauss H & V');
+
+e = edge(a , 'log','horizontal');
+subplot(4,3,10);
+imshow(e);title('Laplacian Gauss horizontal');
+e = edge(a , 'log','vertical');
+subplot(4,3,11);
+imshow(e);title('Laplace Gauss  vertical');
+f = edge(a , 'canny','both');
+subplot(4,3,12);
+imshow(f);title('Canny H & V');

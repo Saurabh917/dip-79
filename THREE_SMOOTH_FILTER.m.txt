@@ -1,0 +1,22 @@
+%IMPLEMENT VARIOUS SMOOTHING SPATIAL FILTERS
+
+clc;
+clear;
+
+x = imread('cameraman.tif');
+
+% -------- Filter Coefficients -------- %
+f1 = [1 1 1; 1 1 1; 1 1 1];
+f2 = [1 0 -1; 1 0 -1; 1 0 -1];
+f3 = [1 1 1; 0 0 0; -1 -1 -1];
+
+% -------- Filtering -------- %
+x1 = x(1:256, 1:256);
+y1 = conv2(x1, f1, 'same');
+y2 = conv2(x1, f2, 'same');
+y3 = conv2(x1, f3, 'same');
+
+subplot(2,2,1); imshow(x); title('Original Image');
+subplot(2,2,2); imshow(uint8(y1)); title('Filtered Image - f1');
+subplot(2,2,3); imshow(uint8(y2)); title('Filtered Image - f2');
+subplot(2,2,4); imshow(uint8(y3)); title('Filtered Image - f3');

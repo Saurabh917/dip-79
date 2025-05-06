@@ -1,0 +1,50 @@
+clc;
+clear all;
+close all;
+
+% ---- Small DCT Example on 4x4 matrix ----
+I4 = [1 1 1 1; 1 1 1 1; 1 1 1 1; 1 1 1 1]; % 4x4 Input
+D4 = dctmtx(4); % 4x4 DCT Matrix
+
+output4 = D4 * I4 * D4'; % Apply DCT
+input4 = D4' * output4 * D4; % Apply Inverse DCT
+
+disp('Original 4x4 Input Matrix:');
+disp(I4);
+
+disp('DCT Matrix (4x4):');
+disp(D4);
+
+disp('DCT of Input Matrix:');
+disp(output4);
+
+disp('Recovered Input Matrix (after IDCT):');
+disp(input4);
+
+% ---- Now Full Image DCT Compression ----
+
+% Read and Preprocess Image
+I = imread('pears.png'); % Read image
+Igray = rgb2gray(I); % Convert to Grayscale
+A = im2bw(Igray); % Convert to Binary image (black & white)
+
+% Apply 2D DCT
+J = dct2(A);
+
+% Apply Inverse DCT
+K = idct2(J);
+
+% Display Results
+figure;
+subplot(3,1,1);
+imshow(A);
+title('Input Image');
+
+subplot(3,1,2);
+imshow(log(abs(J)), []); % Log transform for visibility
+colorbar;
+title('DCT of Input Image');
+
+subplot(3,1,3);
+imshow(K, []);
+title('Reconstructed Image using IDCT');

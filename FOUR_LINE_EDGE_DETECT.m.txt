@@ -1,0 +1,25 @@
+%%LINE DETECTION
+ 
+clc;
+clear;
+close all;
+
+% Load the built-in 'cameraman.tif' image
+I = imread('cameraman.tif');  % This should already be in grayscale format
+
+% Perform edge detection using the Canny method
+BW = edge(I, 'canny');
+
+% Create a figure for the output
+figure('Position', [100, 100, 800, 600]);
+
+% Display the original image
+subplot(1, 2, 1);
+imshow(I);
+title('Original Image');
+
+% Display the edge-detected image (the outlines of the image)
+subplot(1, 2, 2);
+imshow(BW);
+title('Edge Detected Image (Outlines)');
+

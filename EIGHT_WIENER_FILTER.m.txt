@@ -1,0 +1,73 @@
+clc;
+clear all;
+close all;
+
+% Read the original image
+Ioriginal = imread('peppers.png');
+subplot(3,3,1);
+imshow(Ioriginal);
+title('Original Image');
+
+% Create the motion blur filter (PSF)
+PSF = fspecial('motion', 21, 11);
+
+% Convert the image to double precision for filtering
+Idouble = im2double(Ioriginal);
+
+% Apply the motion blur to the image
+blurred = imfilter(Idouble, PSF, 'conv', 'circular');
+subplot(3,3,2);
+imshow(blurred);
+title('Blurred Image');
+
+% Restoration using Wiener deconvolution
+wnr1 = deconvwnr(blurred, PSF);
+subplot(3,3,3);
+imshow(wnr1);
+title('Restored Image (No Noise)');
+
+% Add Gaussian noise to the blurred image
+noise_mean = 0;
+noise_var = 0.0001;
+blurred_noisy = imnoise(blurred, 'gaussian', noise_mean, noise_var);
+subplot(3,3,4);
+imshow(blurred_noisy);
+title('Blurred and Noisy');
+
+% Restoration of the noisy image using Wiener deconvolution with NSR = 0
+wnr2 = deconvwnr(blurred_noisy, PSF);
+subplot(3,3,5);
+imshow(wnr2);
+title('Restored Noisy(NSR=0)');
+
+% Estimate the NSR from the image
+signal_var = var(Idouble(:)); % Signal variance
+NSR = noise_var / signal_var; % Estimate NSR based on noise variance
+
+% Restoration of the noisy image with estimated NSR
+wnr3 = deconvwnr(blurred_noisy, PSF, NSR);
+subplot(3,3,6);
+imshow(wnr3);
+title('Restored Noisy(EST.NSR)');
+
+% Apply motion blur to quantized image
+blurred_quantized = imfilter(Ioriginal, PSF, 'conv', 'circular');
+subplot(3,3,7);
+imshow(blurred_quantized);
+title('Blurred Quantized');
+
+% Restoration of the quantized blurred image with NSR = 0
+wnr4 = deconvwnr(blurred_quantized, PSF);
+subplot(3,3,8);
+imshow(wnr4);
+title('Restored Quantized(NSR=0)');
+
+% Estimate NSR for quantized image based on uniform quantization noise
+uniform_quantized_var = (1 / 256)^2 / 12; % Uniform quantization variance
+NSR_quantized = uniform_quantized_var / signal_var; % NSR for quantized image
+
+% Restoration of the quantized blurred image with estimated NSR
+wnr5 = deconvwnr(blurred_quantized, PSF, NSR_quantized);
+subplot(3,3,9);
+imshow(wnr5);
+title('Restored Quantized(EST.NSR)');

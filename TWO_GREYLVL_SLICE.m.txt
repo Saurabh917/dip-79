@@ -1,0 +1,46 @@
+% GREY LEVEL SLICING TO READ IMAGE
+
+x = imread('cameraman.tif');
+y = x;
+[w, h] = size(x);
+
+for i = 1:w
+    for j = 1:h
+        if x(i, j) >= 100 && x(i, j) <= 200
+            y(i, j) = 255;
+        else
+            y(i, j) = 0;
+        end
+    end
+end
+
+figure, imshow(x);
+title('Original Image');
+figure, imshow(y);
+title('Grey Level Sliced Image (100 <= pixel <= 200)');
+
+% READ AN 8-BIT IMAGE
+
+x = imread('cameraman.tif');
+figure, imshow(x);
+title('8-bit Image');
+
+% EXTRACT IMAGE FOR 8 DIFFERENT PLANES (BITPLANE SLICING)
+
+x = imread('cameraman.tif');
+[w, h] = size(x);
+
+% Create a figure to display all 8 bit planes
+figure;
+for k = 1:8
+    y = zeros(w, h, 'uint8');
+    for i = 1:w
+        for j = 1:h
+            b = bitget(x(i, j), k);
+            y(i, j) = bitset(y(i, j), k, b);
+        end
+    end
+    subplot(2, 4, k);
+    imshow(y);
+    title(['Bit Plane ', num2str(k)]);
+end
